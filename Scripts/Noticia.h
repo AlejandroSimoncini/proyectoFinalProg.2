@@ -13,6 +13,7 @@ class Noticia
         Comentario coment;
     public:
         Noticia();
+        
 };
 
 class Comentario

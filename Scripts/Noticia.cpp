@@ -3,15 +3,9 @@
 #include "Noticia.h"
 using namespace std;
 
-Noticia::Noticia()
+Noticia::Noticia() : titulo(" "), detalle(" "), 
 {
-    string titulo = " ";
-    string detalle = " ";
-    int dia = 0;
-    int mes = 0;
-    int anio = 0;
-    string autor = " ";
-    // Comentario =
+
 }
 
 Comentario::Comentario()
@@ -25,5 +19,18 @@ Persona::Persona()
 {
     string nombre = " ";
     int dni = 0;
-    
+}
+
+
+Usuario::Usuario()
+{
+    int edad = 0;
+    Persona();
+}
+
+
+Autor::Autor()
+{
+    string Medio = " ";
+    Persona();
 }
