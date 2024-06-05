@@ -2,8 +2,11 @@
 
 class Autor : public Persona
 {
-public:
-    Autor();
+    private:
+        string medio;
+    public:
+        Autor();
+        Autor(int dni,string nom, string medio);
 };
 
 
