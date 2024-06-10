@@ -8,4 +8,5 @@ class Usuario : public Persona
         int edad;
     public:
         Usuario(int dni,string nom,int ed);
+        void GuardarUsuario();
 };

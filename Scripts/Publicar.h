@@ -5,7 +5,9 @@ using namespace std;
 
 class Publicar
 {
-    private:
-        Comentario comment;
-        Noticia news;
+    public:
+        void SubirNoticia();
+        void SubirComentario();
+        void RegistrarUsuario();
+        void RegistrarAutor();
 };

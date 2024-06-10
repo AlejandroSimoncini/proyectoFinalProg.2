@@ -7,6 +7,7 @@ class Autor : public Persona
     public:
         Autor();
         Autor(int dni,string nom, string medio);
+        void GuardarAutor();
 };
 
 
