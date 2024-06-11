@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Persona.h"
 
 Persona::Persona(int dni, string nom) 
@@ -11,7 +12,7 @@ string Persona::getNombre()
     return Nombre;
 }
 
-int Persona::getDNI()
+int Persona::getDni()
 {
     return DNI;
 }

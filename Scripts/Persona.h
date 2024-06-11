@@ -8,5 +8,7 @@ public:
     string Nombre;
     int DNI;
     Persona(int dni, string nom);
+    string getNombre();
+    int getDni();
 };
 
