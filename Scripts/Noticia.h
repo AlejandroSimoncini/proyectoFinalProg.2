@@ -10,10 +10,10 @@ class Noticia
         int dia;
         int mes;
         int anio;
-        Comentario *com;
+        Comentario com[5];
     public:
         Noticia();
         Noticia(string tit,string det,int d,int m,int a);
-        Noticia(string tit,string det,int d,int m,int a,Comentario c);
+        void guardarNoticia();
         void AgregarComentario(Comentario c);
 };

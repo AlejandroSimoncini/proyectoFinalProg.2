@@ -1,7 +1,18 @@
-#include"Persona.h"
+#include "Persona.h"
 
-Persona::Persona()
+Persona::Persona(int dni, string nom) 
 {
-    Nombre = " ";
-    DNI = 0;
+    Nombre = nom;
+    DNI = dni;
 }
+
+string Persona::getNombre() 
+{
+    return Nombre;
+}
+
+int Persona::getDNI()
+{
+    return DNI;
+}
+

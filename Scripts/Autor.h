@@ -1,4 +1,5 @@
 #include"Persona.h"
+#include <fstream>
 
 class Autor : public Persona
 {
@@ -6,8 +7,9 @@ class Autor : public Persona
         string medio;
     public:
         Autor();
-        Autor(int dni,string nom, string medio);
-        void GuardarAutor();
+        Autor(int dni , string nom , string medio);
+        string getmedio () ;
+        void guardarAutor();
 };
 
 

@@ -7,6 +7,6 @@ class Persona
 public:
     string Nombre;
     int DNI;
-    Persona();
+    Persona(int dni, string nom);
 };
 

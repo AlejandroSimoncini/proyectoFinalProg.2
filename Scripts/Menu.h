@@ -1,8 +1,0 @@
-class Menu
-{
-private:
-     
-public:
-
-};
-
