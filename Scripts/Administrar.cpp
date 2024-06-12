@@ -6,7 +6,7 @@
 #include "Administrar.h"
 
 
-void Administrar::guardarAutores() const {
+void Administrar::guardarAutores()  {
     ofstream archivo("autores.txt");
     for (int i = 0; i < numAutores; i++) {
         archivo << autores[i].toString() << endl;
@@ -22,7 +22,7 @@ void Administrar::cargarAutores() {
     }
 }
 
-void Administrar::guardarUsuarios() const {
+void Administrar::guardarUsuarios()  {
     ofstream archivo("usuarios.txt");
     for (int i = 0; i < numUsuarios; i++) {
         archivo << usuarios[i].toString() << endl;
@@ -38,7 +38,7 @@ void Administrar::cargarUsuarios() {
     }
 }
 
-void Administrar::guardarNoticias() const {
+void Administrar::guardarNoticias()  {
     ofstream archivo("noticias.txt");
     for (int i = 0; i < numNoticias; i++) {
         archivo << noticias[i].toString() << endl;
@@ -74,7 +74,7 @@ void Administrar::registrarAutor(string dni, string nombre, string medio) {
         autores[numAutores++] = Autor(dni, nombre, medio);
         guardarAutores();
     } else {
-        cout << "No se pueden registrar más autores." << endl;
+        cout << "No se pueden registrar mas autores." << endl;
     }
 }
 
@@ -83,7 +83,7 @@ void Administrar::registrarUsuario(string dni, string nombre, int edad) {
         usuarios[numUsuarios++] = Usuario(dni, nombre, edad);
         guardarUsuarios();
     } else {
-        cout << "No se pueden registrar más usuarios." << endl;
+        cout << "No se pueden registrar mas usuarios." << endl;
     }
 }
 
@@ -95,7 +95,7 @@ void Administrar::cargarNoticia(string titulo, string detalle, int dia, int mes,
                 guardarNoticias();
                 return;
             } else {
-                cout << "No se pueden registrar más noticias." << endl;
+                cout << "No se pueden registrar mas noticias." << endl;
             }
         }
     }
@@ -103,7 +103,7 @@ void Administrar::cargarNoticia(string titulo, string detalle, int dia, int mes,
 }
 
 void Administrar::registrarComentario(int numero, string texto, string dniUsuario) {
-    cout << "\nLista de noticias:\n";
+    cout << "Lista de noticias:"<<endl;
     for (int i = 0; i < numNoticias; i++) {
         cout << i + 1 << ". " << noticias[i].getTitulo() << endl;
     }
@@ -118,24 +118,24 @@ void Administrar::registrarComentario(int numero, string texto, string dniUsuari
             if (usuarios[i].getDni() == dniUsuario) {
                 noticias[opcion - 1].agregarComentario(Comentario(texto,numero,dniUsuario));
                 guardarNoticias();
-                cout << "Comentario agregado correctamente a la noticia: " << tituloNoticia << endl;
+                cout << "comentario agregado correctamente a la noticia: " << tituloNoticia << endl;
                 return;
             }
         }
         cout << "Usuario no encontrado." << endl;
     } 
     else {
-        cout << "Operación cancelada." << endl;
+        cout << "Operacion cancelada." << endl;
     }
 }
 
-void Administrar::listarNoticiasAnio()const
+void Administrar::listarNoticiasAnio()
 {
     int año;
     cout << "Ingrese año: ";
     cin >> año;
 
-    cout << "\nNoticias publicadas en el año " << año << ":\n";
+    cout << "Noticias publicadas en el año " << año << ":"<<endl;
     for (int i = 0; i < numNoticias; i++) {
         if (noticias[i].getAnio() == año) {
             cout << i + 1 << ". " << noticias[i].getTitulo() << endl;
@@ -151,13 +151,13 @@ void Administrar::listarNoticiasAnio()const
     }
 }
 
-void Administrar::listarNoticiasUltimoMes() const {
+void Administrar::listarNoticiasUltimoMes()  {
     time_t now = time(0);
     tm* ltm = localtime(&now);
     int mesActual = 1 + ltm->tm_mon;
     int añoActual = 1900 + ltm->tm_year;
 
-    cout << "\nNoticias publicadas en el último mes:\n";
+    cout << "Noticias publicadas en el último mes:"<<endl;
     int count = 0;
     for (int i = 0; i < numNoticias; i++) {
         if (noticias[i].getAnio() == añoActual && noticias[i].getMes() == mesActual) {
@@ -175,7 +175,7 @@ void Administrar::listarNoticiasUltimoMes() const {
     }
 }
 
-void Administrar::mostrarNoticiaYComentarios() const {
+void Administrar::mostrarNoticiaYComentarios()  {
     cout << "\nLista de noticias:\n";
     for (int i = 0; i < numNoticias; i++) {
         cout << i + 1 << ". " << noticias[i].getTitulo() << endl;
@@ -224,16 +224,16 @@ void Administrar::menu()
         int opcion;
     do {
         cout << "--- Menu ---" << endl;
-        cout << "1. Registrar Autor" << endl;
-        cout << "2. Registrar Usuario" << endl;
-        cout << "3. Cargar Noticia" << endl;
+        cout << "1. Registrar autor" << endl;
+        cout << "2. Registrar usuario" << endl;
+        cout << "3. Cargar noticia" << endl;
         cout << "4. Registrar Comentario" << endl;
-        cout << "5. Listar Noticias por Año" << endl;
-        cout << "6. Listar Noticias del Último Mes" << endl;
-        cout << "7. Mostrar Noticia y Comentarios" << endl;
-        cout << "8. Listar Noticias por Autor" << endl;
+        cout << "5. Listar noticias por anio" << endl;
+        cout << "6. Listar noticias del ultimo mes" << endl;
+        cout << "7. Mostrar noticia y comentarios" << endl;
+        cout << "8. Listar noticias por autor" << endl;
         cout << "0. Salir" << endl;
-        cout << "Seleccione una opción: " << endl;
+        cout << "Seleccione una opcion: " << endl;
         cin >> opcion;
         cin.ignore(); 
 
@@ -273,7 +273,7 @@ void Administrar::menu()
                 cin >> dia;
                 cout << "Ingrese mes: " << endl;
                 cin >> mes;
-                cout << "Ingrese año: " << endl;
+                cout << "Ingrese anio: " << endl;
                 cin >> año;
                 cin.ignore(); 
                 cout << "Ingrese DNI del autor: " << endl;
@@ -284,7 +284,7 @@ void Administrar::menu()
             case 4: {
                 int numero;
                 string texto, dniUsuario;
-                cout << "Ingrese número de comentario: " << endl;
+                cout << "Ingrese numero de comentario: " << endl;
                 cin >> numero;
                 cin.ignore(); 
                 cout << "Ingrese texto del comentario: " << endl;
@@ -315,7 +315,7 @@ void Administrar::menu()
                 break;
             }
             default: {
-                cout << "Opción no válida" << endl;
+                cout << "Opcion no valida" << endl;
             }
         }
     } while (opcion != 0);

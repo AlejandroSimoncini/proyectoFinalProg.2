@@ -16,11 +16,11 @@ class Administrar
         int numAutores;
         int numUsuarios;
         int numNoticias;
-        void guardarAutores()const;
+        void guardarAutores();
         void cargarAutores();
-        void guardarUsuarios()const;
+        void guardarUsuarios();
         void cargarUsuarios ();
-        void guardarNoticias()const;
+        void guardarNoticias();
         void cargarNoticias();
     public:
         Administrar();
@@ -34,10 +34,10 @@ class Administrar
 
         void registrarComentario(int numero, string texto, string dniUsuario);
         
-        void listarNoticiasAnio()const;
-        void listarNoticiasUltimoMes()const;
+        void listarNoticiasAnio();
+        void listarNoticiasUltimoMes();
         void listarNoticiasAutor();
-        void mostrarNoticiaYComentarios()const;
+        void mostrarNoticiaYComentarios();
         
         void menu();
 };
