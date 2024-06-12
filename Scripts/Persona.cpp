@@ -1,18 +1,24 @@
 #include <iostream>
 #include "Persona.h"
 
-Persona::Persona(int dni, string nom) 
+Persona::Persona()
 {
-    Nombre = nom;
+    nombre = "";
+    DNI = "";
+}
+
+Persona::Persona(string dni, string nom) 
+{
+    nombre = nom;
     DNI = dni;
 }
 
-string Persona::getNombre() 
+string Persona::getNombre() const 
 {
-    return Nombre;
+    return nombre;
 }
 
-int Persona::getDni()
+string Persona::getDni() const
 {
     return DNI;
 }

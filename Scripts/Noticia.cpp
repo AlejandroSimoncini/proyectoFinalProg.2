@@ -1,64 +1,100 @@
 #include <iostream>
-#include <fstream>
+#include <string>
+#include <sstream>
 #include "Noticia.h"
 
 Noticia::Noticia()
 {
-    titulo = " ";
-    detalle = " ";
-
+    titulo = "";
+    detalle = "";
     dia = 0;
     mes = 0;
     anio = 0;
-    Comentario();
+    dniAutor = "";
+    numComentarios = 0 ;
+    proximoNumeroComentario = 1 ;
 }
 
-Noticia::Noticia(string tit, string det, int d, int m, int a)
+Noticia::Noticia(string tit, string det, int d, int m, int a,string dniA)
 {
     titulo = tit;
     detalle = det;
-
     dia = d;
     mes = m;
     anio = a;
-    Comentario();
+    dniAutor = dniA;
+    numComentarios = 0 ;
+    proximoNumeroComentario = 1 ;
 }
 
-void Noticia::AgregarComentario(Comentario c)
+void Noticia::agregarComentario(Comentario comment)
 {
-    for (int i = 0; i < 5; i++)
+    if (numComentarios<MAX_COMENTARIOS)
     {
-        if (com[i].numero == 0 and com[i].user == " " and com[i].texto == " ")
-        {
-            cin >> com->user;
-            com->numero = i+1;
-            cout << com->numero;
-            cin >> com->texto;
-        }
+        comentarios->setNumero(proximoNumeroComentario++);
+        comentarios[numComentarios++]=comment;
     }
 }
 
-void Noticia::guardarNoticia()
+void Noticia::mostrar()const
 {
-    ofstream escribirN("noticias.txt"); //se incluye el ios::app para que los datos agregados se pongan uno encima de otro
-    if (escribirN.is_open())
-    {
-        escribirN << dia << "/" << mes << "/" << anio;
-        escribirN << endl;
-        escribirN << titulo;
-        escribirN << endl;
-        escribirN << detalle;
-        escribirN << endl;
-        for (int i = 0; i < 5; i++)
-        {
-            if (com[i].texto != " ")
-            {
-            escribirN << com[i].numero << endl;
-            escribirN << com[i].user << endl;
-            escribirN << com[i].texto << endl;
-            escribirN << endl;
-            escribirN << endl;
-            }
-        }
+    cout << "Titulo: " << titulo << endl;
+    cout << "Detalle: " << detalle << endl;
+    cout << "Fecha: " << dia << "/" << mes << "/" << anio << endl;
+    cout << "Autor: " << dniAutor << endl;
+    cout << "Comentarios: " << endl;
+    for (int i = 0; i < numComentarios; i++) {
+        comentarios[i].mostrar();
     }
+}
+
+string Noticia::toString()  const
+{
+    return titulo + "," + detalle + "," + to_string(dia) + "," + to_string(mes) + "," + to_string(anio) + "," + dniAutor;
+}
+
+Noticia Noticia::fromString(const string& datos) 
+{
+    stringstream ss(datos);
+    string titulo, detalle, diaStr, mesStr, anioStr, dniAutor;
+    getline(ss, titulo, ',');
+    getline(ss, detalle, ',');
+    getline(ss, diaStr, ',');
+    getline(ss, mesStr, ',');
+    getline(ss, anioStr, ',');
+    getline(ss, dniAutor, ',');
+    int dia = stoi(diaStr);
+    int mes = stoi(mesStr);
+    int anio = stoi(anioStr);
+    return Noticia(titulo, detalle, dia, mes, anio, dniAutor);
+}
+
+int Noticia::getAnio() const
+{
+    return anio;
+}
+
+int Noticia::getMes()const
+{
+    return mes; 
+}
+
+string Noticia::getDniAutor() const
+{
+    return dniAutor;
+}
+
+string Noticia::getTitulo()  const
+{
+    return titulo; 
+}
+
+const Comentario* Noticia::getComentarios() const
+{
+    return comentarios;
+}
+    
+int Noticia::getNumComentarios() const
+{
+    return numComentarios;
 }
