@@ -1,18 +1,15 @@
 #include <iostream>
-#include <fstream>
 #include "Persona.h"
 using namespace std;
 
 class Usuario : public Persona
 {
-    public:
+    private:
         int edad;
-        Usuario(int dni,string nom,int ed);
-
-        void guardarUsuario();
-        void cargarUsuario();
-
-        int getDni();
-        string getNombre();
+    public:
+        Usuario();
+        Usuario(string dni,string nom,int ed);
         int getEdad();
+        string toString();
+        static Usuario fromString(string& datos);
 };

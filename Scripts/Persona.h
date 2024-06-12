@@ -1,14 +1,17 @@
-#include<string> 
+#ifndef PERSONA_H
+#define PERSONA_H
 #include<iostream>   
 using namespace std;
 
 class Persona
 {
-public:
-    string Nombre;
-    int DNI;
-    Persona(int dni, string nom);
-    string getNombre();
-    int getDni();
+    protected:
+        string DNI;
+        string nombre;
+    public:
+        Persona();
+        Persona(string dni,string nom);
+        string getDni();
+        string getNombre();
 };
-
+#endif 

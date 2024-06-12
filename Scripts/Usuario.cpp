@@ -1,21 +1,17 @@
 #include <iostream>
-#include<fstream>
+#include <string>
+#include <sstream>
 #include "Usuario.h"
 using namespace std;
 
-Usuario::Usuario(int dni, string nom,int ed) : Persona(dni, nom)
+Usuario::Usuario() : Persona()
+{
+    edad = 0;
+}
+
+Usuario::Usuario(string dni, string nom,int ed) : Persona(dni, nom)
 {
     edad = ed;
-}
-
-int Usuario::getDni()
-{
-    return DNI;
-}
-
-string Usuario::getNombre()
-{
-    return Nombre;
 }
 
 int Usuario::getEdad()
@@ -23,15 +19,19 @@ int Usuario::getEdad()
     return edad;
 }
 
-void Usuario::guardarUsuario()
+string Usuario::toString()
 {
-    ofstream escribirU("usuarios.txt");
-    if (escribirU.is_open())
-    {
-        escribirU << Nombre << endl;
-        escribirU << DNI << endl;
-        escribirU << edad << endl;
-        escribirU << endl;
-    }
-    
+    return DNI + "," + nombre + "," + to_string(edad);
 }
+
+Usuario Usuario::fromString(string& datos)
+{
+    stringstream ss(datos);
+    string dni, nombre, edadStr;
+    getline(ss, dni, ',');
+    getline(ss, nombre, ',');
+    getline(ss, edadStr, ',');
+    int edad = stoi(edadStr);
+    return Usuario(dni, nombre, edad);
+}
+

@@ -1,27 +1,35 @@
 #include"Autor.h"
+#include <iostream>
+#include <sstream>
+#include <string>
 #include <fstream>
 
-Autor::Autor(int dni , string nom , string medi) : Persona(dni, nom)
+Autor::Autor() : Persona()
 {
-    medio = medi ;
+    medio = "";
 }
 
-string Autor::getmedio()
+Autor::Autor(string dni , string nom , string medi):Persona(dni, nom)
+{
+    medio = medi;
+}
+
+string Autor::getMedio()
 {
     return medio ;
 }
 
-void Autor::guardarAutor()
+string Autor::toString()
 {
-    ofstream escribirA ("autores.txt");
+    return DNI + "," + nombre + "," + medio;
+}
 
-    if (escribirA.is_open())
-    {
-        escribirA << Nombre << endl ;
-        escribirA << medio << endl ;
-        escribirA << DNI << endl ;
-        escribirA.close();
-    }
-
-    
+Autor Autor::fromString(string& datos)
+{
+    stringstream ss(datos);
+    string dni,nombre,medio;
+    getline(ss,dni,',');
+    getline(ss, nombre, ',');
+    getline(ss, medio, ',');
+    return Autor(dni, nombre, medio);
 }
