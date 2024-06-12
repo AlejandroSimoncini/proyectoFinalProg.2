@@ -10,6 +10,6 @@ class Usuario : public Persona
         Usuario();
         Usuario(string dni,string nom,int ed);
         int getEdad();
-        string toString();
-        static Usuario fromString(string& datos);
+        string toString() const;
+        static Usuario fromString(const string& datos);
 };

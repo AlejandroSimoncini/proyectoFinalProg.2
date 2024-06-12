@@ -17,12 +17,12 @@ Comentario::Comentario(string com, int num, string usr)
     dniUsuario = usr;
 }
 
-string Comentario::toString()
+string Comentario::toString()const
 {
     return to_string(numero) + "," + texto + "," + dniUsuario;
 }
 
-Comentario Comentario::fromString(string& datos)
+Comentario Comentario::fromString(const string& datos)
 {
     stringstream ss(datos);
     string texto,strNumero,dniUser;
@@ -33,7 +33,7 @@ Comentario Comentario::fromString(string& datos)
     return Comentario(texto,num,dniUser);
 }
 
-string Comentario::getDniUsuario()
+string Comentario::getDniUsuario()const
 {
     return dniUsuario;
 }
@@ -43,7 +43,7 @@ void Comentario::setNumero(int num)
     numero = num;
 }
 
-void Comentario::mostrar()
+void Comentario::mostrar()const
 {
     cout << "Comentario #" << numero << " por " << dniUsuario << ": " << texto << endl;
 }

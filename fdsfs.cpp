@@ -1,196 +1,175 @@
 #include <iostream>
-#include <string>
 #include <fstream>
-#include <sstream>
-#include <ctime>
+#include <ctime> 
+#include <string>
 #include "Administrar.h"
 
-
-void Administrar::guardarAutores() const {
+void Administrar::guardarAutor()const
+{
     ofstream archivo("autores.txt");
-    for (int i = 0; i < numAutores; i++) {
+    for (int i = 0; i < numAutores; i++)
+    {
         archivo << autores[i].toString() << endl;
     }
 }
 
-void Administrar::cargarAutores() {
+void Administrar::cargarAutor()
+{
     ifstream archivo("autores.txt");
     string linea;
     numAutores = 0;
-    while (getline(archivo, linea) && numAutores < MAX_AUTORES) {
+    while (getline(archivo,linea) && numAutores < MAX_AUTORES)
+    {
         autores[numAutores++] = Autor::fromString(linea);
     }
 }
 
-void Administrar::guardarUsuarios() const {
+
+void Administrar::guardarUsuario()const
+{
     ofstream archivo("usuarios.txt");
-    for (int i = 0; i < numUsuarios; i++) {
-        archivo << usuarios[i].toString() << endl;
+    for (int i = 0 ; i < numAutores ; i++)
+    {
+        archivo << usuarios[i].toString() << endl; 
     }
 }
 
-void Administrar::cargarUsuarios() {
+void Administrar::cargarUsuario()
+{
     ifstream archivo("usuarios.txt");
     string linea;
     numUsuarios = 0;
-    while (getline(archivo, linea) && numUsuarios < MAX_USUARIOS) {
+    while (getline(archivo,linea) && numUsuarios<MAX_USUARIOS)
+    {
         usuarios[numUsuarios++] = Usuario::fromString(linea);
     }
 }
 
-void Administrar::guardarNoticias() const {
+void Administrar::guardarNoticia()const
+{
     ofstream archivo("noticias.txt");
-    for (int i = 0; i < numNoticias; i++) {
+    for (int i = 0; i < numNoticias; i++)
+    {
         archivo << noticias[i].toString() << endl;
-        for (int j = 0; j < noticias[i].getNumComentarios(); j++) {
-            archivo << noticias[i].getComentarios()[j].toString() << endl;
+        for (int j = 0; j < noticias[i].getNumComentarios(); j++)
+        {
+            archivo << noticias[i].getComentarios()[j].toString() <<endl;
         }
-        archivo << "###" << endl;
+        archivo << "###" <<endl;
     }
 }
 
-void Administrar::cargarNoticias() {
+void Administrar::cargarNoticia()
+{
     ifstream archivo("noticias.txt");
     string linea;
     numNoticias = 0;
-    while (getline(archivo, linea) && numNoticias < MAX_NOTICIAS) {
-        if (linea == "###") continue;
-        Noticia noticia = Noticia::fromString(linea);
-        while (getline(archivo, linea) && linea != "###") {
-            noticia.agregarComentario(Comentario::fromString(linea));
+    while (getline(archivo,linea) && numNoticias<MAX_NOTICIAS)
+    {
+        if (linea == "###")
+        {
+            continue;
         }
+        Noticia noticia = Noticia::fromString(linea);
+        while (getline(archivo,linea) && linea != "###")
+        {
+            noticia.agregarComentario(Comentario::fromString(linea));
+        }   
         noticias[numNoticias++] = noticia;
     }
 }
 
-Administrar::Administrar() : numAutores(0), numUsuarios(0), numNoticias(0) {
-    cargarAutores();
-    cargarUsuarios();
-    cargarNoticias();
+Administrar::Administrar()
+{
+    cargarAutor();
+    cargarUsuario();
+    cargarNoticia();
+    numAutores = 0;
+    numUsuarios = 0;
+    numNoticias = 0;
 }
 
-void Administrar::registrarAutor(string dni, string nombre, string medio) {
-    if (numAutores < MAX_AUTORES) {
-        autores[numAutores++] = Autor(dni, nombre, medio);
-        guardarAutores();
-    } else {
-        cout << "No se pueden registrar más autores." << endl;
+void Administrar::registrarAutor(string dni, string nombre, string medio)
+{
+    if (numAutores<MAX_AUTORES)
+    {
+        autores[numAutores++] = Autor(dni,nombre,medio);
+        guardarAutor();
+    }
+    else
+    {
+        cout << "no se pueden registrar mas autores" <<endl;
     }
 }
 
-void Administrar::registrarUsuario(string dni, string nombre, int edad) {
-    if (numUsuarios < MAX_USUARIOS) {
-        usuarios[numUsuarios++] = Usuario(dni, nombre, edad);
-        guardarUsuarios();
-    } else {
-        cout << "No se pueden registrar más usuarios." << endl;
+void Administrar::registrarUsuario(string dni, string nombre, int edad)
+{
+    if (numUsuarios<MAX_USUARIOS)
+    {
+        usuarios[numUsuarios++] = Usuario(dni,nombre,edad);
+        guardarUsuario();
+    }
+    else
+    {
+        cout << "no se pueden registrar mas usuarios" <<endl;
     }
 }
 
-void Administrar::cargarNoticia(string titulo, string detalle, int dia, int mes, int año, string dniAutor) {
-    for (int i = 0; i < numAutores; i++) {
-        if (autores[i].getDni() == dniAutor) {
-            if (numNoticias < MAX_NOTICIAS) {
-                noticias[numNoticias++] = Noticia(titulo, detalle, dia, mes, año, dniAutor);
-                guardarNoticias();
-                return;
-            } else {
-                cout << "No se pueden registrar más noticias." << endl;
+void Administrar::registrarNoticia(string titulo, string detalle, int dia, int mes, int año, string dniAutor)
+{
+    for (int i = 0; i < numAutores; i++)
+    {
+        if (autores[i].getDni() == dniAutor)
+        {
+            if (numNoticias < MAX_NOTICIAS)
+            {
+                noticias[numNoticias++] = Noticia(titulo,detalle,dia,mes,año,dniAutor);
+                guardarNoticia();
+            }
+            else
+            {
+                cout << "No se pueden registrar mas noticias"<<endl;
             }
         }
+        else
+        {
+            cout <<"ingrese un dni de autor ya registrado"<<endl;
+        }
     }
-    cout << "Autor no encontrado." << endl;
 }
 
-void Administrar::registrarComentario(int numero, string texto, string dniUsuario) {
-    cout << "\nLista de noticias:\n";
-    for (int i = 0; i < numNoticias; i++) {
-        cout << i + 1 << ". " << noticias[i].getTitulo() << endl;
+void Administrar::registrarComentario(int numero, string texto, string dniUsuario)
+{
+    cout<<"lista de noticias:"<<endl;
+    for (int i = 0; i < numNoticias; i++)
+    {
+        cout << i+1 << ". " <<noticias[i].getTitulo() << endl;
     }
-
     int opcion;
     cout << "Seleccione la noticia a comentar (0 para cancelar): ";
     cin >> opcion;
 
-    if (opcion > 0 && opcion <= numNoticias) {
-        string tituloNoticia = noticias[opcion - 1].getTitulo();
-        for (int i = 0; i < numUsuarios; i++) {
-            if (usuarios[i].getDni() == dniUsuario) {
+    if (opcion > 0 && opcion <= numNoticias) 
+    {        
+        for (int i = 0; i < numUsuarios; i++) 
+        {
+            if (usuarios[i].getDni() == dniUsuario) 
+            {
                 noticias[opcion - 1].agregarComentario(Comentario(texto,numero,dniUsuario));
-                guardarNoticias();
-                cout << "Comentario agregado correctamente a la noticia: " << tituloNoticia << endl;
-                return;
+                guardarNoticia();
+                cout << "Comentario agregado correctamente a la noticia: " << noticias[opcion - 1].getTitulo() << endl;
             }
         }
         cout << "Usuario no encontrado." << endl;
     } 
-    else {
+    else 
+    {
         cout << "Operación cancelada." << endl;
     }
 }
 
-void Administrar::listarNoticiasAnio()const
+void Administrar::filtrarAutor() 
 {
-    int año;
-    cout << "Ingrese año: ";
-    cin >> año;
-
-    cout << "\nNoticias publicadas en el año " << año << ":\n";
-    for (int i = 0; i < numNoticias; i++) {
-        if (noticias[i].getAnio() == año) {
-            cout << i + 1 << ". " << noticias[i].getTitulo() << endl;
-        }
-    }
-
-    int opcion;
-    cout << "Seleccione una noticia para ver detalles (0 para salir): ";
-    cin >> opcion;
-
-    if (opcion > 0 && opcion <= numNoticias) {
-        noticias[opcion - 1].mostrar();
-    }
-}
-
-void Administrar::listarNoticiasUltimoMes() const {
-    time_t now = time(0);
-    tm* ltm = localtime(&now);
-    int mesActual = 1 + ltm->tm_mon;
-    int añoActual = 1900 + ltm->tm_year;
-
-    cout << "\nNoticias publicadas en el último mes:\n";
-    int count = 0;
-    for (int i = 0; i < numNoticias; i++) {
-        if (noticias[i].getAnio() == añoActual && noticias[i].getMes() == mesActual) {
-            cout << count + 1 << ". " << noticias[i].getTitulo() << endl;
-            count++;
-        }
-    }
-
-    int opcion;
-    cout << "Seleccione una noticia para ver detalles (0 para salir): ";
-    cin >> opcion;
-
-    if (opcion > 0 && opcion <= count) {
-        noticias[opcion - 1].mostrar();
-    }
-}
-
-void Administrar::mostrarNoticiaYComentarios() const {
-    cout << "\nLista de noticias:\n";
-    for (int i = 0; i < numNoticias; i++) {
-        cout << i + 1 << ". " << noticias[i].getTitulo() << endl;
-    }
-
-    int opcion;
-    cout << "Seleccione una noticia para ver detalles y comentarios (0 para salir): ";
-    cin >> opcion;
-
-    if (opcion > 0 && opcion <= numNoticias) {
-        noticias[opcion - 1].mostrar();
-    }
-}
-
-void Administrar::listarNoticiasAutor()  {
     cout << "Lista de autores:"<<endl;
     for (int i = 0; i < numAutores; i++) {
         cout << i + 1 << ". " << autores[i].getNombre() << endl;
@@ -200,9 +179,10 @@ void Administrar::listarNoticiasAutor()  {
     cout << "Seleccione un autor para ver sus noticias (0 para salir): ";
     cin >> opcion;
 
-    if (opcion > 0 && opcion <= numAutores) {
+    if (opcion > 0 && opcion <= numAutores) 
+    {
         string dniAutor = autores[opcion - 1].getDni();
-        cout << "Noticias publicadas por " << autores[opcion - 1].getNombre() << ":"<<endl;
+        cout << "\nNoticias publicadas por " << autores[opcion - 1].getNombre() << ":\n";
         for (int i = 0; i < numNoticias; i++) {
             if (noticias[i].getDniAutor() == dniAutor) {
                 cout << i + 1 << ". " << noticias[i].getTitulo() << endl;
@@ -212,16 +192,73 @@ void Administrar::listarNoticiasAutor()  {
         cout << "Seleccione una noticia para ver detalles (0 para salir): ";
         cin >> opcion;
 
-        if (opcion > 0 && opcion <= numNoticias) {
+        if (opcion > 0 && opcion <= numNoticias) 
+        {
             noticias[opcion - 1].mostrar();
         }
     }
 }
 
-void Administrar::menu() 
+void Administrar::filtrarnoticiasAnio()const
 {
+    
+    int anio;
+    int opcion;
+    cout << "Ingrese el año del que desea leer noticias " << endl ;
+    cin >> anio;
+    
+    cout << "Noticias publicadas en el año "<< anio << ":" << endl ;
 
-        int opcion;
+    for (int i = 0 ; i < numNoticias ; i++)
+    {
+        if (noticias[i].getAnio() == anio )
+        {
+            cout << i + 1 << "." << noticias[i].getTitulo() << endl ;
+        }
+    }
+
+    cout << "Seleccione una notica para leer ( 0 para salir )" << endl ;
+    cin >> opcion ;
+
+    if(opcion > 0 && opcion <= numNoticias)
+    {
+        noticias [opcion - 1].mostrar();
+    }
+}
+
+void Administrar::filtrarnoticiasUltmes()const 
+{
+    time_t t = time(nullptr);
+    tm* timePtr = localtime(&t);
+    int mesActual = timePtr->tm_mon + 1;
+    int anioActual = timePtr->tm_year + 1900;
+
+    for (int i = 0; i < numNoticias; i++) {
+        if (noticias[i].getAnio() == anioActual && noticias[i].getMes() == mesActual) {
+            noticias[i].mostrar();
+        }
+    }
+}
+
+void Administrar::mostrarNoticiaComentarios()const
+{
+    cout<<"lista de noticias:"<<endl;
+    for (int i = 0; i < numNoticias; i++)
+    {
+        cout << i+1 << ". " <<noticias[i].getTitulo() << endl;
+    }
+    int opcion;
+    cout<<"seleccione una noticia para ver detalles y comentariios (0 para salir)"<<endl;
+    cin>> opcion;
+
+    if(opcion > 0 && opcion <= numNoticias)
+    {
+        noticias[opcion-1].mostrar();
+    }
+}
+
+void Administrar::menu() {
+    int opcion;
     do {
         cout << "--- Menu ---" << endl;
         cout << "1. Registrar Autor" << endl;
@@ -278,7 +315,7 @@ void Administrar::menu()
                 cin.ignore(); 
                 cout << "Ingrese DNI del autor: " << endl;
                 getline(cin, dniAutor);
-                cargarNoticia(titulo, detalle, dia, mes, año, dniAutor);
+                registrarNoticia(titulo, detalle, dia, mes, año, dniAutor);
                 break;
             }
             case 4: {
@@ -295,19 +332,19 @@ void Administrar::menu()
                 break;
             }
             case 5: {
-                listarNoticiasAnio();
+                filtrarnoticiasAnio();
                 break;
             }
             case 6: {
-                listarNoticiasUltimoMes();
+                filtrarnoticiasUltmes();
                 break;
             }
             case 7: {
-                mostrarNoticiaYComentarios();
+                mostrarNoticiaComentarios();
                 break;
             }
             case 8: {
-                listarNoticiasAutor();
+                filtrarAutor();
                 break;
             }
             case 0: {

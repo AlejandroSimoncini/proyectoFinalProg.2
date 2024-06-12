@@ -32,12 +32,11 @@ void Noticia::agregarComentario(Comentario comment)
     if (numComentarios<MAX_COMENTARIOS)
     {
         comentarios->setNumero(proximoNumeroComentario++);
-        comentarios[numComentarios]=comment;
+        comentarios[numComentarios++]=comment;
     }
-    
 }
 
-void Noticia::mostrar()
+void Noticia::mostrar()const
 {
     cout << "Titulo: " << titulo << endl;
     cout << "Detalle: " << detalle << endl;
@@ -49,12 +48,12 @@ void Noticia::mostrar()
     }
 }
 
-string Noticia::toString()  
+string Noticia::toString()  const
 {
     return titulo + "," + detalle + "," + to_string(dia) + "," + to_string(mes) + "," + to_string(anio) + "," + dniAutor;
 }
 
-Noticia Noticia::fromString(string& datos) 
+Noticia Noticia::fromString(const string& datos) 
 {
     stringstream ss(datos);
     string titulo, detalle, diaStr, mesStr, anioStr, dniAutor;
@@ -70,32 +69,32 @@ Noticia Noticia::fromString(string& datos)
     return Noticia(titulo, detalle, dia, mes, anio, dniAutor);
 }
 
-int Noticia::getAnio() 
+int Noticia::getAnio() const
 {
     return anio;
 }
 
-int Noticia::getMes()
+int Noticia::getMes()const
 {
     return mes; 
 }
 
-string Noticia::getDniAutor() 
+string Noticia::getDniAutor() const
 {
     return dniAutor;
 }
 
-string Noticia::getTitulo()  
+string Noticia::getTitulo()  const
 {
     return titulo; 
 }
 
-Comentario* Noticia::getComentarios() 
+const Comentario* Noticia::getComentarios() const
 {
     return comentarios;
 }
     
-int Noticia::getNumComentarios()
+int Noticia::getNumComentarios() const
 {
     return numComentarios;
 }

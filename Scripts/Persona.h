@@ -11,7 +11,7 @@ class Persona
     public:
         Persona();
         Persona(string dni,string nom);
-        string getDni();
-        string getNombre();
+        string getDni() const;
+        string getNombre() const;
 };
 #endif 

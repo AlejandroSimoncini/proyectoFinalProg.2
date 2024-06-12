@@ -3,11 +3,13 @@
 #include <fstream>
 #include <sstream>
 #include <ctime>
+
 using namespace std;
 
 const int MAX_AUTORES = 100;
 const int MAX_USUARIOS = 100;
 const int MAX_NOTICIAS = 100;
+const int MAX_COMENTARIOS = 100;
 
 class Persona {
     protected:
@@ -19,6 +21,98 @@ class Persona {
         string getDni();
         string getNombre();
 };
+
+class Autor : public Persona {
+    private:
+        string medio;
+    public:
+        Autor();
+        Autor(string dni, string nom, string med);
+        string getMedio();
+        string toString();
+        static Autor fromString(string& datos);
+};
+
+class Usuario : public Persona {
+    private:
+        int edad;
+    public:
+        Usuario();
+        Usuario(string dni, string nom, int ed);
+        int getEdad();
+        string toString();
+        static Usuario fromString(string& datos);
+};
+
+class Comentario {
+    private:
+        int numero;
+        string texto;
+        string dniUsuario;
+    public:
+        Comentario();
+        Comentario(string com, int num, string usr);
+        string toString();
+        static Comentario fromString(string& datos);
+        string getDniUsuario();
+        void setNumero(int num);
+        void mostrar();
+};
+
+class Noticia {
+    private:
+        string titulo;
+        string detalle;
+        int dia;
+        int mes;
+        int anio;
+        string dniAutor;
+        Comentario comentarios[MAX_COMENTARIOS];
+        int numComentarios;
+        int proximoNumeroComentario;
+    public:
+        Noticia();
+        Noticia(string tit, string det, int d, int m, int a, string dniA);
+        void agregarComentario(Comentario comment);
+        void mostrar();
+        string toString();
+        static Noticia fromString(string& str);
+        int getAnio();
+        int getMes();
+        string getDniAutor();
+        string getTitulo();
+        Comentario* getComentarios();
+        int getNumComentarios();
+};
+
+class Administrar {
+    private:
+        Noticia noticias[MAX_NOTICIAS];
+        Usuario usuarios[MAX_USUARIOS];
+        Autor autores[MAX_AUTORES];
+        int numAutores;
+        int numUsuarios;
+        int numNoticias;
+        void guardarAutor();
+        void cargarAutor();
+        void guardarUsuario();
+        void cargarUsuario();
+        void guardarNoticia();
+        void cargarNoticia();
+    public:
+        Administrar();
+        void registrarAutor(string dni, string nombre, string medio);
+        void registrarUsuario(string dni, string nombre, int edad);
+        void registrarNoticia(string titulo, string detalle, int dia, int mes, int año, string dniAutor);
+        void registrarComentario(int numero, string texto, string dniUsuario);
+        void filtrarNoticiasAnio();
+        void filtrarNoticiasUltMes();
+        void filtrarAutor();
+        void mostrarNoticiaComentarios();
+        void menu();
+};
+
+// Implementación de métodos de Persona
 
 Persona::Persona() {
     nombre = "";
@@ -38,20 +132,9 @@ string Persona::getDni() {
     return DNI;
 }
 
-class Autor : public Persona {
-    private:
-        string medio;
-    public:
-        Autor();
-        Autor(string dni, string nom, string med);
-        string getMedio();
-        string toString();
-        static Autor fromString(string& datos);
-};
+// Implementación de métodos de Autor
 
-Autor::Autor() {
-    DNI= "";
-    nombre = "";
+Autor::Autor() : Persona() {
     medio = "";
 }
 
@@ -76,20 +159,35 @@ Autor Autor::fromString(string& datos) {
     return Autor(dni, nombre, medio);
 }
 
-class Comentario {
-    private:
-        int numero;
-        string texto;
-        string dniUsuario;
-    public:
-        Comentario();
-        Comentario(string com, int num, string usr);
-        string toString();
-        static Comentario fromString(string& datos);
-        string getDniUsuario();
-        void setNumero(int num);
-        void mostrar();
-};
+// Implementación de métodos de Usuario
+
+Usuario::Usuario() : Persona() {
+    edad = 0;
+}
+
+Usuario::Usuario(string dni, string nom, int ed) : Persona(dni, nom) {
+    edad = ed;
+}
+
+int Usuario::getEdad() {
+    return edad;
+}
+
+string Usuario::toString() {
+    return DNI + "," + nombre + "," + to_string(edad);
+}
+
+Usuario Usuario::fromString(string& datos) {
+    stringstream ss(datos);
+    string dni, nombre, edadStr;
+    getline(ss, dni, ',');
+    getline(ss, nombre, ',');
+    getline(ss, edadStr, ',');
+    int edad = stoi(edadStr);
+    return Usuario(dni, nombre, edad);
+}
+
+// Implementación de métodos de Comentario
 
 Comentario::Comentario() {
     texto = "";
@@ -129,34 +227,7 @@ void Comentario::mostrar() {
     cout << "Comentario #" << numero << " por " << dniUsuario << ": " << texto << endl;
 }
 
-const int MAX_COMENTARIOS = 100;
-
-class Noticia {
-    private:
-        string titulo;
-        string detalle;
-        int dia;
-        int mes;
-        int anio;
-        string dniAutor;
-        Comentario comentarios[MAX_COMENTARIOS];
-        int numComentarios;
-        int proximoNumeroComentario;
-
-    public:
-        Noticia();
-        Noticia(string tit, string det, int d, int m, int a, string dniA);
-        void agregarComentario(Comentario comment);
-        void mostrar();
-        string toString();
-        static Noticia fromString(string& str);
-        int getAnio();
-        int getMes();
-        string getDniAutor();
-        string getTitulo();
-        Comentario* getComentarios();
-        int getNumComentarios();
-};
+// Implementación de métodos de Noticia
 
 Noticia::Noticia() {
     titulo = "";
@@ -241,76 +312,16 @@ int Noticia::getNumComentarios() {
     return numComentarios;
 }
 
-class Usuario : public Persona {
-    private:
-        int edad;
-    public:
-        Usuario();
-        Usuario(string dni, string nom, int ed);
-        int getEdad();
-        string toString();
-        static Usuario fromString(string& datos);
-};
+// Implementación de métodos de Administrar
 
-Usuario::Usuario() {
-    DNI = "";
-    nombre = "";
-    edad = 0;
+Administrar::Administrar() {
+    numAutores = 0;
+    numUsuarios = 0;
+    numNoticias = 0;
+    cargarAutor();
+    cargarUsuario();
+    cargarNoticia();
 }
-
-Usuario::Usuario(string dni, string nom, int ed) : Persona(dni, nom) {
-    edad = ed;
-}
-
-int Usuario::getEdad() {
-    return edad;
-}
-
-string Usuario::toString() {
-    return DNI + "," + nombre + "," + to_string(edad);
-}
-
-Usuario Usuario::fromString(string& datos) {
-    stringstream ss(datos);
-    string dni, nombre, edadStr;
-    getline(ss, dni, ',');
-    getline(ss, nombre, ',');
-    getline(ss, edadStr, ',');
-    int edad = stoi(edadStr);
-    return Usuario(dni, nombre, edad);
-}
-
-class Administrar {
-    private:
-        Noticia noticias[MAX_NOTICIAS];
-        Usuario usuarios[MAX_USUARIOS];
-        Autor autores[MAX_AUTORES];
-        int numAutores;
-        int numUsuarios;
-        int numNoticias;
-    public:
-        Administrar();
-        void guardarAutor();
-        void cargarAutor();
-        void registrarAutor(string dni, string nombre, string medio);
-
-        void guardarUsuario();
-        void cargarUsuario();
-        void registrarUsuario(string dni, string nombre, int edad);
-
-        void guardarNoticia();
-        void cargarNoticia();
-        void registrarNoticia(string titulo, string detalle, int dia, int mes, int año, string dniAutor);
-
-        void registrarComentario(int numero, string texto, string dniUsuario);
-        
-        void filtrarnoticiasAnio();
-        void filtrarnoticiasUltmes();
-        void filtrarAutor();
-        void mostrarNoticiaComentarios();
-        
-        void menu();
-};
 
 void Administrar::guardarAutor() {
     ofstream archivo("autores.txt");
@@ -331,7 +342,7 @@ void Administrar::cargarAutor() {
 void Administrar::guardarUsuario() {
     ofstream archivo("usuarios.txt");
     for (int i = 0; i < numUsuarios; i++) {
-        archivo << usuarios[i].toString() << endl; 
+        archivo << usuarios[i].toString() << endl;
     }
 }
 
@@ -347,7 +358,11 @@ void Administrar::cargarUsuario() {
 void Administrar::guardarNoticia() {
     ofstream archivo("noticias.txt");
     for (int i = 0; i < numNoticias; i++) {
-        archivo << noticias[i].toString() << endl; 
+        archivo << noticias[i].toString() << endl;
+        for (int j = 0; j < noticias[i].getNumComentarios(); j++) {
+            archivo << noticias[i].getComentarios()[j].toString() << endl;
+        }
+        archivo << "END" << endl;
     }
 }
 
@@ -356,103 +371,54 @@ void Administrar::cargarNoticia() {
     string linea;
     numNoticias = 0;
     while (getline(archivo, linea) && numNoticias < MAX_NOTICIAS) {
-        noticias[numNoticias++] = Noticia::fromString(linea);
+        Noticia noticia = Noticia::fromString(linea);
+        while (getline(archivo, linea) && linea != "END") {
+            Comentario comentario = Comentario::fromString(linea);
+            noticia.agregarComentario(comentario);
+        }
+        noticias[numNoticias++] = noticia;
     }
-}
-
-Administrar::Administrar() {
-    numAutores = 0;
-    numUsuarios = 0;
-    numNoticias = 0;
-    cargarAutor();
-    cargarUsuario();
-    cargarNoticia();
 }
 
 void Administrar::registrarAutor(string dni, string nombre, string medio) {
-    for (int i = 0; i < numAutores; i++) {
-        if (autores[i].getDni() == dni) {
-            cout << "El autor con este DNI ya esta registrado." << endl;
-            return;
-        }
-    }
-
     if (numAutores < MAX_AUTORES) {
         autores[numAutores++] = Autor(dni, nombre, medio);
         guardarAutor();
-        cout << "Autor registrado exitosamente." << endl;
     } else {
         cout << "No se pueden registrar más autores." << endl;
     }
 }
 
 void Administrar::registrarUsuario(string dni, string nombre, int edad) {
-    for (int i = 0; i < numUsuarios; i++) {
-        if (usuarios[i].getDni() == dni) {
-            cout << "El usuario con este DNI ya esta registrado." << endl;
-            return;
-        }
-    }
-
     if (numUsuarios < MAX_USUARIOS) {
         usuarios[numUsuarios++] = Usuario(dni, nombre, edad);
         guardarUsuario();
-        cout << "Usuario registrado exitosamente." << endl;
     } else {
         cout << "No se pueden registrar más usuarios." << endl;
     }
 }
 
-void Administrar::registrarNoticia(string titulo, string detalle, int dia, int mes, int año, string dniAutor) {
-    bool autorRegistrado = false;
-    for (int i = 0; i < numAutores; i++) {
-        if (autores[i].getDni() == dniAutor) {
-            autorRegistrado = true;
-            break;
-        }
-    }
-
-    if (!autorRegistrado) {
-        cout << "No se puede registrar la noticia. El autor no está registrado." << endl;
-        return;
-    }
-
+void Administrar::registrarNoticia(string titulo, string detalle, int dia, int mes, int anio, string dniAutor) {
     if (numNoticias < MAX_NOTICIAS) {
-        noticias[numNoticias++] = Noticia(titulo, detalle, dia, mes, año, dniAutor);
+        noticias[numNoticias++] = Noticia(titulo, detalle, dia, mes, anio, dniAutor);
         guardarNoticia();
-        cout << "Noticia registrada exitosamente." << endl;
     } else {
         cout << "No se pueden registrar más noticias." << endl;
     }
 }
 
 void Administrar::registrarComentario(int numero, string texto, string dniUsuario) {
-    bool usuarioRegistrado = false;
-    for (int i = 0; i < numUsuarios; i++) {
-        if (usuarios[i].getDni() == dniUsuario) {
-            usuarioRegistrado = true;
-            break;
-        }
-    }
-
-    if (!usuarioRegistrado) {
-        cout << "No se puede registrar el comentario. El usuario no está registrado." << endl;
-        return;
-    }
-
     for (int i = 0; i < numNoticias; i++) {
         if (noticias[i].getNumComentarios() < MAX_COMENTARIOS) {
             noticias[i].agregarComentario(Comentario(texto, numero, dniUsuario));
             guardarNoticia();
-            cout << "Comentario registrado exitosamente." << endl;
             return;
         }
     }
-
     cout << "No se pudo registrar el comentario." << endl;
 }
 
-void Administrar::filtrarnoticiasAnio() {
+void Administrar::filtrarNoticiasAnio() {
     int anio;
     cout << "Ingrese el año: ";
     cin >> anio;
@@ -463,14 +429,13 @@ void Administrar::filtrarnoticiasAnio() {
     }
 }
 
-void Administrar::filtrarnoticiasUltmes() {
-    time_t t = time(nullptr);
-    tm* timePtr = localtime(&t);
-    int mesActual = timePtr->tm_mon + 1;
-    int anioActual = timePtr->tm_year + 1900;
-
+void Administrar::filtrarNoticiasUltMes() {
+    time_t t = time(0);
+    struct tm* now = localtime(&t);
+    int mes = now->tm_mon + 1;
+    int anio = now->tm_year + 1900;
     for (int i = 0; i < numNoticias; i++) {
-        if (noticias[i].getAnio() == anioActual && noticias[i].getMes() == mesActual) {
+        if (noticias[i].getMes() == mes && noticias[i].getAnio() == anio) {
             noticias[i].mostrar();
         }
     }
@@ -488,35 +453,41 @@ void Administrar::filtrarAutor() {
 }
 
 void Administrar::mostrarNoticiaComentarios() {
+    string titulo;
+    cout << "Ingrese el titulo de la noticia: ";
+    cin.ignore();
+    getline(cin, titulo);
     for (int i = 0; i < numNoticias; i++) {
-        noticias[i].mostrar();
+        if (noticias[i].getTitulo() == titulo) {
+            noticias[i].mostrar();
+        }
     }
 }
 
 void Administrar::menu() {
     int opcion;
     do {
-        cout << "Menu:" << endl;
         cout << "1. Registrar autor" << endl;
         cout << "2. Registrar usuario" << endl;
         cout << "3. Registrar noticia" << endl;
         cout << "4. Registrar comentario" << endl;
         cout << "5. Filtrar noticias por año" << endl;
-        cout << "6. Filtrar noticias del ultimo mes" << endl;
+        cout << "6. Filtrar noticias del último mes" << endl;
         cout << "7. Filtrar noticias por autor" << endl;
-        cout << "8. Mostrar noticias y comentarios" << endl;
+        cout << "8. Mostrar noticias y comentarios por título" << endl;
         cout << "9. Salir" << endl;
-        cout << "Seleccione una opcion: ";
+        cout << "Ingrese una opción: ";
         cin >> opcion;
-        switch(opcion) {
+        switch (opcion) {
             case 1: {
                 string dni, nombre, medio;
                 cout << "Ingrese DNI: ";
                 cin >> dni;
                 cout << "Ingrese nombre: ";
-                cin >> nombre;
+                cin.ignore();
+                getline(cin, nombre);
                 cout << "Ingrese medio: ";
-                cin >> medio;
+                getline(cin, medio);
                 registrarAutor(dni, nombre, medio);
                 break;
             }
@@ -526,7 +497,8 @@ void Administrar::menu() {
                 cout << "Ingrese DNI: ";
                 cin >> dni;
                 cout << "Ingrese nombre: ";
-                cin >> nombre;
+                cin.ignore();
+                getline(cin, nombre);
                 cout << "Ingrese edad: ";
                 cin >> edad;
                 registrarUsuario(dni, nombre, edad);
@@ -536,9 +508,10 @@ void Administrar::menu() {
                 string titulo, detalle, dniAutor;
                 int dia, mes, anio;
                 cout << "Ingrese titulo: ";
-                cin >> titulo;
+                cin.ignore();
+                getline(cin, titulo);
                 cout << "Ingrese detalle: ";
-                cin >> detalle;
+                getline(cin, detalle);
                 cout << "Ingrese dia: ";
                 cin >> dia;
                 cout << "Ingrese mes: ";
@@ -556,17 +529,18 @@ void Administrar::menu() {
                 cout << "Ingrese numero de comentario: ";
                 cin >> numero;
                 cout << "Ingrese texto del comentario: ";
-                cin >> texto;
+                cin.ignore();
+                getline(cin, texto);
                 cout << "Ingrese DNI del usuario: ";
                 cin >> dniUsuario;
                 registrarComentario(numero, texto, dniUsuario);
                 break;
             }
             case 5:
-                filtrarnoticiasAnio();
+                filtrarNoticiasAnio();
                 break;
             case 6:
-                filtrarnoticiasUltmes();
+                filtrarNoticiasUltMes();
                 break;
             case 7:
                 filtrarAutor();
@@ -575,13 +549,13 @@ void Administrar::menu() {
                 mostrarNoticiaComentarios();
                 break;
             case 9:
-                cout << "Saliendo del programa..." << endl;
+                cout << "Saliendo..." << endl;
                 break;
             default:
-                cout << "Opcion invalida" << endl;
+                cout << "Opción no válida" << endl;
                 break;
         }
-    } while(opcion != 9);
+    } while (opcion != 9);
 }
 
 int main() {

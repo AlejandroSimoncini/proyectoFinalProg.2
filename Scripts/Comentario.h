@@ -12,11 +12,11 @@ class Comentario
     public:
         Comentario();
         Comentario(string com, int num, string usr);
-        string toString();
-        static Comentario fromString(string& datos);
-        string getDniUsuario();
+        string toString() const;
+        static Comentario fromString(const string& datos);
+        string getDniUsuario() const;
         void setNumero(int num);
-        void mostrar();
+        void mostrar() const;
 };
 
 #endif 

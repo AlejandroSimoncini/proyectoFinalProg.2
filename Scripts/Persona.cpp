@@ -13,12 +13,12 @@ Persona::Persona(string dni, string nom)
     DNI = dni;
 }
 
-string Persona::getNombre() 
+string Persona::getNombre() const 
 {
     return nombre;
 }
 
-string Persona::getDni()
+string Persona::getDni() const
 {
     return DNI;
 }

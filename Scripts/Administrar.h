@@ -16,12 +16,12 @@ class Administrar
         int numAutores;
         int numUsuarios;
         int numNoticias;
-        void guardarAutor();
-        void cargarAutor();
-        void guardarUsuario();
-        void cargarUsuario ();
-        void guardarNoticia();
-        void cargarNoticia();
+        void guardarAutores()const;
+        void cargarAutores();
+        void guardarUsuarios()const;
+        void cargarUsuarios ();
+        void guardarNoticias()const;
+        void cargarNoticias();
     public:
         Administrar();
 
@@ -30,14 +30,14 @@ class Administrar
         void registrarUsuario(string dni, string nombre, int edad);
 
         
-        void registrarNoticia(string titulo, string detalle, int dia, int mes, int año, string dniAutor);
+        void cargarNoticia(string titulo, string detalle, int dia, int mes, int año, string dniAutor);
 
         void registrarComentario(int numero, string texto, string dniUsuario);
         
-        void filtrarnoticiasAnio();
-        void filtrarnoticiasUltmes();
-        void filtrarAutor();
-        void mostrarNoticiaComentarios();
+        void listarNoticiasAnio()const;
+        void listarNoticiasUltimoMes()const;
+        void listarNoticiasAutor();
+        void mostrarNoticiaYComentarios()const;
         
         void menu();
 };

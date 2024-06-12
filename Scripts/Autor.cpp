@@ -19,12 +19,22 @@ string Autor::getMedio()
     return medio ;
 }
 
-string Autor::toString()
+string Autor::getNombre()
+{
+    return nombre;
+}
+
+string Autor::getDni()
+{
+    return DNI;
+}
+
+string Autor::toString() const 
 {
     return DNI + "," + nombre + "," + medio;
 }
 
-Autor Autor::fromString(string& datos)
+Autor Autor::fromString(const string& datos)
 {
     stringstream ss(datos);
     string dni,nombre,medio;

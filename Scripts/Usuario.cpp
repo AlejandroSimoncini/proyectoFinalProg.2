@@ -19,12 +19,12 @@ int Usuario::getEdad()
     return edad;
 }
 
-string Usuario::toString()
+string Usuario::toString() const
 {
     return DNI + "," + nombre + "," + to_string(edad);
 }
 
-Usuario Usuario::fromString(string& datos)
+Usuario Usuario::fromString(const string& datos)
 {
     stringstream ss(datos);
     string dni, nombre, edadStr;

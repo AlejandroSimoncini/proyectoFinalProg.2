@@ -9,6 +9,8 @@ class Autor : public Persona
         Autor();
         Autor(string dni , string nom , string med);
         string getMedio();
-        string toString();
-        static Autor fromString(string& datos);
+        string getNombre();
+        string getDni();
+        string toString() const;
+        static Autor fromString(const string& datos);
 };
