@@ -91,18 +91,22 @@ void Administrar::cargarNoticia(string titulo, string detalle, int dia, int mes,
     for (int i = 0; i < numAutores; i++) {
         if (autores[i].getDni() == dniAutor) {
             if (numNoticias < MAX_NOTICIAS) {
-                noticias[numNoticias++] = Noticia(titulo, detalle, dia, mes, año, dniAutor);
+                string nombre = autores[i].getNombre();
+                noticias[numNoticias++] = Noticia(titulo, detalle, dia, mes, año, dniAutor,nombre);
                 guardarNoticias();
                 return;
             } else {
                 cout << "No se pueden registrar mas noticias." << endl;
             }
         }
+        else 
+        {
+            cout << "Autor no encontrado." << endl;
+        }
     }
-    cout << "Autor no encontrado." << endl;
 }
 
-void Administrar::registrarComentario(int numero, string texto, string dniUsuario) {
+void Administrar::registrarComentario(string texto, string dniUsuario) {
     cout << "Lista de noticias:"<<endl;
     for (int i = 0; i < numNoticias; i++) {
         cout << i + 1 << ". " << noticias[i].getTitulo() << endl;
@@ -111,21 +115,23 @@ void Administrar::registrarComentario(int numero, string texto, string dniUsuari
     int opcion;
     cout << "Seleccione la noticia a comentar (0 para cancelar): ";
     cin >> opcion;
-
+    
     if (opcion > 0 && opcion <= numNoticias) {
         string tituloNoticia = noticias[opcion - 1].getTitulo();
         for (int i = 0; i < numUsuarios; i++) {
             if (usuarios[i].getDni() == dniUsuario) {
-                noticias[opcion - 1].agregarComentario(Comentario(texto,numero,dniUsuario));
+                numComentarios++;
+                string nombreUsuario = usuarios[i].getNombre();
+                noticias[opcion - 1].agregarComentario(Comentario(texto,numComentarios,dniUsuario,nombreUsuario));
                 guardarNoticias();
                 cout << "comentario agregado correctamente a la noticia: " << tituloNoticia << endl;
                 return;
             }
         }
-        cout << "Usuario no encontrado." << endl;
+        cout << "Usuario no encontrado" << endl;
     } 
     else {
-        cout << "Operacion cancelada." << endl;
+        cout << "Operacion cancelada" << endl;
     }
 }
 
@@ -153,9 +159,9 @@ void Administrar::listarNoticiasAnio()
 
 void Administrar::listarNoticiasUltimoMes()  {
     time_t now = time(0);
-    tm* ltm = localtime(&now);
-    int mesActual = 1 + ltm->tm_mon;
-    int añoActual = 1900 + ltm->tm_year;
+    tm* fecha = localtime(&now);
+    int mesActual = 1 + fecha->tm_mon;
+    int añoActual = 1900 + fecha->tm_year;
 
     cout << "Noticias publicadas en el último mes:"<<endl;
     int count = 0;
@@ -176,7 +182,7 @@ void Administrar::listarNoticiasUltimoMes()  {
 }
 
 void Administrar::mostrarNoticiaYComentarios()  {
-    cout << "\nLista de noticias:\n";
+    cout << "Lista de noticias:"<<endl;
     for (int i = 0; i < numNoticias; i++) {
         cout << i + 1 << ". " << noticias[i].getTitulo() << endl;
     }
@@ -218,10 +224,33 @@ void Administrar::listarNoticiasAutor()  {
     }
 }
 
-void Administrar::menu() 
-{
+bool verificarAnio(int anio) {
+    return anio >= 1900 && anio <= 2024;
+}
 
-        int opcion;
+bool verificarDia(int dia, int mes, int anio) {
+    if (dia < 1 || dia > 31)
+        return false;
+    if ((mes == 4 || mes == 6 || mes == 9 || mes == 11) && dia > 30)
+        return false;
+    if (mes == 2) {
+        if ((anio % 4 == 0 && anio % 100 != 0) || anio % 400 == 0) {
+            if (dia > 29)
+                return false;
+        } else {
+            if (dia > 28)
+                return false;
+        }
+    }
+    return true;
+}
+
+bool verificarMes(int mes) {
+    return mes >= 1 && mes <= 12;
+}
+
+void Administrar::menu() {
+    int opcion;
     do {
         cout << "--- Menu ---" << endl;
         cout << "1. Registrar autor" << endl;
@@ -233,12 +262,13 @@ void Administrar::menu()
         cout << "7. Mostrar noticia y comentarios" << endl;
         cout << "8. Listar noticias por autor" << endl;
         cout << "0. Salir" << endl;
-        cout << "Seleccione una opcion: " << endl;
+        cout << "Seleccione una opcion: ";
         cin >> opcion;
         cin.ignore(); 
 
         switch (opcion) {
             case 1: {
+                // Registro de autor
                 string dni, nombre, medio;
                 cout << "Ingrese DNI: ";
                 getline(cin, dni);
@@ -250,6 +280,7 @@ void Administrar::menu()
                 break;
             }
             case 2: {
+                // Registro de usuario
                 string dni, nombre;
                 int edad;
                 cout << "Ingrese DNI: ";
@@ -263,50 +294,64 @@ void Administrar::menu()
                 break;
             }
             case 3: {
+                // Carga de noticia
                 string titulo, detalle, dniAutor;
-                int dia, mes, año;
-                cout << "Ingrese título: " << endl;
+                int dia, mes, anio;
+                cout << "Ingrese titulo: ";
                 getline(cin, titulo);
-                cout << "Ingrese detalle: " << endl;
+                cout << "Ingrese detalle: ";
                 getline(cin, detalle);
-                cout << "Ingrese día: " << endl;
+                cout << "Ingrese dia: ";
                 cin >> dia;
-                cout << "Ingrese mes: " << endl;
+                cout << "Ingrese mes: ";
                 cin >> mes;
-                cout << "Ingrese anio: " << endl;
-                cin >> año;
+                cout << "Ingrese anio: ";
+                cin >> anio;
+                while (!verificarDia(dia, mes , anio)) {
+                    cout << "Dia invalido. Ingrese un dia valido: ";
+                    cin >> dia;
+                }
+                while (!verificarMes(mes)) {
+                    cout << "Mes invalido. Ingrese un mes entre 1 y 12: ";
+                    cin >> mes;
+                }
+                while (!verificarAnio(anio)) {
+                    cout << "Anio invalido. Ingrese un anio entre 1900 y 2024: ";
+                    cin >> anio;
+                }
                 cin.ignore(); 
-                cout << "Ingrese DNI del autor: " << endl;
+                cout << "Ingrese DNI del autor: ";
                 getline(cin, dniAutor);
-                cargarNoticia(titulo, detalle, dia, mes, año, dniAutor);
+                cargarNoticia(titulo, detalle, dia, mes, anio, dniAutor);
                 break;
             }
             case 4: {
-                int numero;
+                // Registro de comentario
                 string texto, dniUsuario;
-                cout << "Ingrese numero de comentario: " << endl;
-                cin >> numero;
-                cin.ignore(); 
-                cout << "Ingrese texto del comentario: " << endl;
+                cout << "Ingrese texto del comentario: ";
                 getline(cin, texto);
-                cout << "Ingrese DNI del usuario: " << endl;
+                cout << "Ingrese DNI del usuario: ";
                 getline(cin, dniUsuario);
-                registrarComentario(numero, texto, dniUsuario);
+                registrarComentario(texto, dniUsuario);
                 break;
             }
             case 5: {
+                // Listar noticias por año
                 listarNoticiasAnio();
                 break;
             }
             case 6: {
+                // Listar noticias del último mes
                 listarNoticiasUltimoMes();
                 break;
             }
             case 7: {
+                // Mostrar noticia y comentarios
                 mostrarNoticiaYComentarios();
                 break;
             }
             case 8: {
+                // Listar noticias por autor
                 listarNoticiasAutor();
                 break;
             }

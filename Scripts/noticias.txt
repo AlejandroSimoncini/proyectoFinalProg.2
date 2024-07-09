@@ -1,4 +1,0 @@
-noticia 1,este es el cuerpo de la noticia 1,15,6,2024,1
-2,buena noticia,3
-2,otro comentario,3
-###
