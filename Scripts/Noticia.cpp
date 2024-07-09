@@ -11,11 +11,12 @@ Noticia::Noticia()
     mes = 0;
     anio = 0;
     dniAutor = "";
+    nombreAutor= "";
     numComentarios = 0 ;
     proximoNumeroComentario = 1 ;
 }
 
-Noticia::Noticia(string tit, string det, int d, int m, int a,string dniA)
+Noticia::Noticia(string tit, string det, int d, int m, int a,string dniA,string nombreA)
 {
     titulo = tit;
     detalle = det;
@@ -23,6 +24,7 @@ Noticia::Noticia(string tit, string det, int d, int m, int a,string dniA)
     mes = m;
     anio = a;
     dniAutor = dniA;
+    nombreAutor = nombreA;
     numComentarios = 0 ;
     proximoNumeroComentario = 1 ;
 }
@@ -36,55 +38,56 @@ void Noticia::agregarComentario(Comentario comment)
     }
 }
 
-void Noticia::mostrar()const
+void Noticia::mostrar()
 {
     cout << "Titulo: " << titulo << endl;
     cout << "Detalle: " << detalle << endl;
     cout << "Fecha: " << dia << "/" << mes << "/" << anio << endl;
-    cout << "Autor: " << dniAutor << endl;
+    cout << "Autor: " << nombreAutor << endl;
     cout << "Comentarios: " << endl;
     for (int i = 0; i < numComentarios; i++) {
         comentarios[i].mostrar();
     }
 }
 
-string Noticia::toString()  const
+string Noticia::toString()  
 {
-    return titulo + "," + detalle + "," + to_string(dia) + "," + to_string(mes) + "," + to_string(anio) + "," + dniAutor;
+    return titulo + "," + detalle + "," + to_string(dia) + "," + to_string(mes) + "," + to_string(anio) + "," + dniAutor + "," + nombreAutor;
 }
 
 Noticia Noticia::fromString(const string& datos) 
 {
     stringstream ss(datos);
-    string titulo, detalle, diaStr, mesStr, anioStr, dniAutor;
+    string titulo, detalle, diaStr, mesStr, anioStr, dniAutor,nombreAutor;
     getline(ss, titulo, ',');
     getline(ss, detalle, ',');
     getline(ss, diaStr, ',');
     getline(ss, mesStr, ',');
     getline(ss, anioStr, ',');
     getline(ss, dniAutor, ',');
+    getline(ss, nombreAutor, ',');
     int dia = stoi(diaStr);
     int mes = stoi(mesStr);
     int anio = stoi(anioStr);
-    return Noticia(titulo, detalle, dia, mes, anio, dniAutor);
+    return Noticia(titulo, detalle, dia, mes, anio, dniAutor,nombreAutor);
 }
 
-int Noticia::getAnio() const
+int Noticia::getAnio() 
 {
     return anio;
 }
 
-int Noticia::getMes()const
+int Noticia::getMes()
 {
     return mes; 
 }
 
-string Noticia::getDniAutor() const
+string Noticia::getDniAutor() 
 {
     return dniAutor;
 }
 
-string Noticia::getTitulo()  const
+string Noticia::getTitulo()  
 {
     return titulo; 
 }
@@ -94,7 +97,12 @@ const Comentario* Noticia::getComentarios() const
     return comentarios;
 }
     
-int Noticia::getNumComentarios() const
+int Noticia::getNumComentarios() 
 {
     return numComentarios;
+}
+
+string Noticia::getNombreAutor()
+{
+    return nombreAutor;
 }

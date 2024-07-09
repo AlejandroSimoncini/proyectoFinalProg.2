@@ -16,6 +16,7 @@ class Administrar
         int numAutores;
         int numUsuarios;
         int numNoticias;
+        int numComentarios = 0;
         void guardarAutores();
         void cargarAutores();
         void guardarUsuarios();
@@ -32,7 +33,7 @@ class Administrar
         
         void cargarNoticia(string titulo, string detalle, int dia, int mes, int año, string dniAutor);
 
-        void registrarComentario(int numero, string texto, string dniUsuario);
+        void registrarComentario(string texto, string dniUsuario);
         
         void listarNoticiasAnio();
         void listarNoticiasUltimoMes();

@@ -12,21 +12,23 @@ class Noticia {
         int mes;
         int anio;
         string dniAutor;
+        string nombreAutor;
         Comentario comentarios[MAX_COMENTARIOS];
         int numComentarios;
         int proximoNumeroComentario;
 
     public:
         Noticia();
-        Noticia(string tit,string det,int d,int m,int a,string dniA);
+        Noticia(string tit,string det,int d,int m,int a,string dniA,string nombreA);
         void agregarComentario(Comentario comment);
-        void mostrar()const;
-        string toString()const;
+        void mostrar();
+        string toString();
         static Noticia fromString(const string& datos);
-        int getAnio()const;
-        int getMes()const;
-        string getDniAutor()const;
-        string getTitulo()const;
+        int getAnio();
+        int getMes();
+        string getDniAutor();
+        string getTitulo();
         const Comentario* getComentarios() const;
-        int getNumComentarios()const;
+        int getNumComentarios();
+        string getNombreAutor();
 };

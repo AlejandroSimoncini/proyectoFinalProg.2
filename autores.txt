@@ -1,2 +1,0 @@
-46045458,tomas,clarin
-1,juan,bbc
